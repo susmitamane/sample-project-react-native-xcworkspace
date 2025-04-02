@@ -1,0 +1,35 @@
+name: Check VisionOS
+
+on:
+  workflow_dispatch: # Manually trigger the workflowjobs:
+jobs:
+  check-xcode-VisionOS:
+    runs-on: [ macos-15 ] 
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Check Xcode version
+      run: xcodebuild -version
+
+    - name: Set up Xcode 16.2
+      run: |
+        XCODE_PATH="/Applications/Xcode_16.2.app/Contents/Developer"
+        if [ -d "$XCODE_PATH" ]; then
+          sudo xcode-select --switch "$XCODE_PATH"
+          echo "Switched to Xcode 16.2"
+        else
+          echo "Xcode 16.2 not found!" && exit 1
+        fi
+    - name: List available SDKs
+      run: xcodebuild -showsdks
+
+    - name: List simulators
+      run: xcrun simctl list devices
+
+    - name: Build with Xcode for visionOS
+      run: |
+        xcodebuild -project SampleProjectReactNative.xcodeproj \
+          -scheme SampleProjectReactNative \
+          -destination "platform=visionOS Simulator,name=Apple Vision Pro,OS=2.2"
+          build 
