@@ -31,5 +31,5 @@ jobs:
       run: |
         xcodebuild -project ios/SampleProjectReactNative.xcodeproj \
           -scheme SampleProjectReactNative \
-          -destination "platform=visionOS Simulator,name=Apple Vision Pro,OS=2.2"
+          -destination "-destination "generic/platform=visionOS"
           build 
